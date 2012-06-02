@@ -11,7 +11,7 @@ from timezones.utils import coerce_timezone_value, validate_timezone_max_length
 
 
 MAX_TIMEZONE_LENGTH = getattr(settings, "MAX_TIMEZONE_LENGTH", 100)
-default_tz = pytz.timezone(getattr(settings, "TIME_ZONE", "UTC"))
+default_tz = pytz.timezone(getattr(settings, "TIMEZONES_DEFAULT", getattr(settings, "TIME_ZONE", "UTC")))
 
 
 class TimeZoneField(models.CharField):
@@ -22,7 +22,7 @@ class TimeZoneField(models.CharField):
         validate_timezone_max_length(MAX_TIMEZONE_LENGTH, zones.ALL_TIMEZONE_CHOICES)
         defaults = {
             "max_length": MAX_TIMEZONE_LENGTH,
-            "default": settings.TIME_ZONE,
+            "default": default_tz,
             "choices": zones.PRETTY_TIMEZONE_CHOICES
         }
         defaults.update(kwargs)
